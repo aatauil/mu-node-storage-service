@@ -9,6 +9,8 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="license: MIT" />
   </a>
+  <a href="https://github.com/aatauil/mu-node-storage-service/actions/workflows/docker-publish.yml">
+    <img src="https://github.com/aatauil/mu-node-storage-service/actions/workflows/docker-publish.yml/badge.svg" alt="docker-publish" />
   </a>
 </p>
 
