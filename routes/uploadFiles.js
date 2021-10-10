@@ -1,6 +1,7 @@
 import { sparqlEscapeString, sparqlEscapeInt, sparqlEscapeUri, sparqlEscapeDateTime, uuid } from 'mu';
 import { updateSudo as update } from '@lblod/mu-auth-sudo';
 import { s3 } from '../s3';
+import { APPLICATION_GRAPH, BUCKET_NAME, FILE_RESOURCE_BASE } from '../config';
 
 export default async function uploadFiles(req, res) {
   
@@ -18,7 +19,7 @@ export default async function uploadFiles(req, res) {
 
   const uploadResourceUuid = uuid();
   const uploadResourceName = file.name;
-  const uploadResourceUri = `http://mu.semte.ch/services/file-service/files/${uploadResourceUuid}`;
+  const uploadResourceUri = `${FILE_RESOURCE_BASE}${uploadResourceUuid}`;
 
   const fileFormat = file.mimetype;
   const fileExtention = file.name.split(".").pop();
@@ -36,7 +37,7 @@ export default async function uploadFiles(req, res) {
     PREFIX nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>
     
     INSERT DATA {
-      GRAPH <http://mu.semte.ch/application> {
+      GRAPH <${APPLICATION_GRAPH}> {
         ${sparqlEscapeUri(uploadResourceUri)} a nfo:FileDataObject ;
             nfo:fileName ${sparqlEscapeString(uploadResourceName)} ;
             mu:uuid ${sparqlEscapeString(uploadResourceUuid)} ;
@@ -62,7 +63,7 @@ export default async function uploadFiles(req, res) {
   await update(insertFileQuery);
 
   var params = { 
-    Bucket: 'testbucket', 
+    Bucket: BUCKET_NAME, 
     Key: fileResourceName, 
     Body: file.data, 
     ContentType: file.mimetype,

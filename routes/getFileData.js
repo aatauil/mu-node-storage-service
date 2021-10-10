@@ -1,5 +1,6 @@
 import { querySudo as query } from '@lblod/mu-auth-sudo';
 import { sparqlEscapeString } from 'mu';
+import { APPLICATION_GRAPH } from '../config';
 import parseResults from '../utils/parse-results';
 
 export default async function getFileData(req, res) {
@@ -13,7 +14,7 @@ export default async function getFileData(req, res) {
     PREFIX dbpedia: <http://dbpedia.org/resource/>
 
     SELECT ?uri ?name ?format ?size ?extension WHERE {
-      GRAPH <http://mu.semte.ch/application> {
+      GRAPH <${APPLICATION_GRAPH}> {
         ?uri mu:uuid ${sparqlEscapeString(fileId)} ;
             nfo:fileName ?name ;
             dc:format ?format ;

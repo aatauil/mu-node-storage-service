@@ -1,5 +1,6 @@
 import { querySudo as query, updateSudo as update } from '@lblod/mu-auth-sudo';
 import { sparqlEscapeString, sparqlEscapeInt, sparqlEscapeUri, sparqlEscapeDateTime, uuid } from 'mu';
+import { APPLICATION_GRAPH, BUCKET_NAME } from '../config';
 import { s3 } from '../s3';
 import parseResults from '../utils/parse-results';
 
@@ -12,7 +13,7 @@ export default async function deleteFile(req, res) {
     PREFIX nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>
     
     SELECT ?uri ?fileUrl WHERE {
-      GRAPH <http://mu.semte.ch/application> {
+      GRAPH <${APPLICATION_GRAPH}> {
         ?uri mu:uuid ${sparqlEscapeString(fileId)} .
         ?fileUrl nie:dataSource ?uri .
       }
@@ -24,7 +25,7 @@ export default async function deleteFile(req, res) {
   const fileKey = fileUrl.split("//").pop();
 
   const params = {
-    Bucket: "testbucket",
+    Bucket: BUCKET_NAME,
     Key: fileKey
   }
 
@@ -38,7 +39,7 @@ export default async function deleteFile(req, res) {
     PREFIX nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>
 
     DELETE WHERE {
-      GRAPH <> {
+      GRAPH <${APPLICATION_GRAPH}> {
         ${sparqlEscapeUri(uri)} a nfo:FileDataObject ;
           nfo:fileName ?upload_name ;
           mu:uuid ?upload_id ;

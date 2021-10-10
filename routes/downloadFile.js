@@ -2,6 +2,7 @@ import { querySudo as query } from '@lblod/mu-auth-sudo';
 import { sparqlEscapeString, sparqlEscapeInt, sparqlEscapeUri, sparqlEscapeDateTime, uuid } from 'mu';
 import parseResults from '../utils/parse-results';
 import { s3 } from '../s3';
+import { APPLICATION_GRAPH, BUCKET_NAME } from '../config';
 
 export default async function downloadFile(req, res) {
 
@@ -12,7 +13,7 @@ export default async function downloadFile(req, res) {
     PREFIX nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>
 
     SELECT ?fileUrl WHERE {
-      GRAPH <http://mu.semte.ch/application> {
+      GRAPH <${APPLICATION_GRAPH}> {
         ?uri mu:uuid ${sparqlEscapeString(fileId)} .
         ?fileUrl nie:dataSource ?uri .
       }
@@ -24,7 +25,7 @@ export default async function downloadFile(req, res) {
   const fileKey = fileUrl.split("//").pop();
 
   const params = {
-    Bucket: 'testbucket',
+    Bucket: BUCKET_NAME,
     Key: fileKey,
   }
 
