@@ -40,7 +40,7 @@ This service lets you save your file using object storage. It can both be used w
 - Add the following service to your docker-compose.yml file: 
 ```yml
   storage: 
-    image: mu-node-storage-service
+    image: aatauil/mu-node-storage-service
     environment:
       ACCESS_KEY_ID: "awskeyid"
       SECRET_ACCESS_KEY: "awspass"
